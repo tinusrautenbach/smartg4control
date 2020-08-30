@@ -93,6 +93,7 @@ This binding currently supports the following thing types:
 SmartG4Control have unique device IDS per equipment type, these can also be found on the smartcloud sofware the following has been implemented:
 (https://www.smartg4control.com/products-1)
 
+```
 DEVICE_ID_DIMMER_8 = 550;
 DEVICE_ID_RELAY_12 = 440;
 DEVICE_ID_RELAY_6 = 426;
@@ -104,6 +105,7 @@ DEVICE_ID_9IN1 = 309;
 DEVICE_ID_6IN1 = 313;
 DEVICE_ID_5IN1 = 314;
 DEVICE_ID_PIR = 135;
+```
 
 ## Thing Configurations
 
