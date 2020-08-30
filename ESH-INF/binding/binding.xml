@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<binding:binding id="smartg4control" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:binding="http://eclipse.org/smarthome/schemas/binding/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/binding/v1.0.0 http://eclipse.org/smarthome/schemas/binding-1.0.0.xsd">
+
+	<name>Smartg4control Binding</name>
+	<description>This is the binding for smartg4control.</description>
+	<author>TinusRautenbach</author>
+
+	<config-description>
+		<parameter name="listenAddress" type="text">
+			<label>listenAddress</label>
+			<description>listenAddress</description>
+			<default>192.168.1.238</default>
+			
+		</parameter>
+		<parameter name="gateWayAddress" type="text">
+            <label>gateWayAddress</label>
+            <description>gateWayAddress</description>
+            <default>255.255.255.255</default>
+            
+        </parameter>
+        <parameter name="gateWayPort" type="integer">
+            <label>gateWayPort</label>
+            <description>gateWayPort</description>
+            <default>6000</default>
+            
+        </parameter>
+        <parameter name="listenPort" type="integer">
+            <label>listenPort</label>
+            <description>listenPort</description>
+            <default>6000</default>
+            
+        </parameter>
+	</config-description>
+
+</binding:binding>

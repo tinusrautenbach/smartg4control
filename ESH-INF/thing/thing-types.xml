@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="smartg4control" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<!-- Sample Thing Type -->
+	<thing-type id="dimmer">
+
+
+		<label>G4S Dimmer</label>
+		<description>Controls dimmable loads</description>
+
+		<channels>
+			<channel id="lightlevel" typeId="lightDimmer" />
+		</channels>
+
+		<config-description>
+			<parameter name="deviceid" type="integer" required="true">
+				<label>deviceid</label>
+				<description>Address of dimmer </description>
+			</parameter>
+			<parameter name="subnetid" type="integer">
+				<label>subnet</label>
+				<description>subnet</description>
+			</parameter>
+			<parameter name="channel" type="integer">
+				<label>Channel of the load</label>
+				<description>Channel of the load</description>
+			</parameter>
+		</config-description>
+	</thing-type>
+
+	<thing-type id="switch">
+		<label> Switch</label>
+		<description>On/off switch</description>
+
+		<channels>
+			<channel id="switchstatus" typeId="switchState" />
+		</channels>
+
+		<config-description>
+			<parameter name="deviceid" type="integer" required="true">
+				<label>deviceid</label>
+				<description>Address of dimmer </description>
+			</parameter>
+			<parameter name="subnetid" type="integer">
+				<label>subnet</label>
+				<description>subnet</description>
+			</parameter>
+			<parameter name="channel" type="integer">
+				<label>Channel of the load</label>
+				<description>Channel of the load</description>
+			</parameter>
+		</config-description>
+	</thing-type>
+
+
+	<thing-type id="sensor">
+		<label>Sensor</label>
+		<description>On/off switch</description>
+
+		<channels>
+			<channel id="temperature" typeId="temperature" />
+			<channel id="motion" typeId="motion" />
+			
+			
+		</channels>
+
+		<config-description>
+			<parameter name="deviceid" type="integer" required="true">
+				<label>deviceid</label>
+				<description>Address of dimmer </description>
+			</parameter>
+			<parameter name="subnetid" type="integer">
+				<label>subnet</label>
+				<description>subnet</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+
+    <thing-type id="ddp">
+        <label>ddp</label>
+        <description>DDP switch</description>
+
+        <channels>
+            <channel id="temperature" typeId="temperature" />
+        </channels>
+
+        <config-description>
+            <parameter name="deviceid" type="integer" required="true">
+                <label>deviceid</label>
+                <description>Address of dimmer </description>
+            </parameter>
+            <parameter name="subnetid" type="integer">
+                <label>subnet</label>
+                <description>subnet</description>
+            </parameter>
+
+        </config-description>
+    </thing-type>
+    
+    <thing-type id="logic">
+        <label>logic</label>
+        <description>DDP logic unit</description>
+
+        <channels>
+            <channel id="datetime" typeId="datetime" />
+        </channels>
+
+        <config-description>
+            <parameter name="deviceid" type="integer" required="true">
+                <label>deviceid</label>
+                <description>Address of dimmer </description>
+            </parameter>
+            <parameter name="subnetid" type="integer">
+                <label>subnet</label>
+                <description>subnet</description>
+            </parameter>
+
+        </config-description>
+    </thing-type>
+    
+    
+	<!-- Sample Channel Type -->
+
+    <channel-type id="datetime">
+        <item-type>DateTime</item-type>
+        <label>DateTime</label>
+        <description>DateTime</description>
+
+    </channel-type>
+
+
+	<channel-type id="temperature">
+		<item-type>Temperature</item-type>
+		<label>Temperature</label>
+		<description>Current measured temperature</description>
+		<category>Temperature</category>
+		<state pattern="%.1f C" readOnly="true" />
+	</channel-type>
+
+	<channel-type id="motion">
+		<item-type>Switch</item-type>
+		<label>Motion Status</label>
+		<category>Motion</category>
+		<state readOnly="true"></state>
+	</channel-type>
+	<channel-type id="lastMotion">
+		<item-type>DateTime</item-type>
+		<label>Last Activity (Date/Time)</label>
+		<description>Date/time when last motion was detected</description>
+		<state readOnly="true"></state>
+	</channel-type>
+
+
+	<channel-type id="lightDimmer">
+		<item-type>Dimmer</item-type>
+		<label>Light Level</label>
+		<description>Increase/decrease the light level</description>
+		<category>DimmableLight</category>
+		<state min="0" max="100" pattern="%d %%" />
+	</channel-type>
+
+	<channel-type id="switchState">
+		<item-type>Switch</item-type>
+		<label>Switch State</label>
+		<description>On/off status of the switch</description>
+		<category>Switch</category>
+	</channel-type>
+
+</thing:thing-descriptions>
