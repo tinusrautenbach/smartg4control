@@ -1,4 +1,4 @@
-# Lutron Binding
+# SmartG4Control Binding
 
 This binding integrates with [smartg4control](https://www.smartg4control.com/) control system.
 
