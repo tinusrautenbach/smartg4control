@@ -76,6 +76,8 @@ public class Smartg4controlServer implements Runnable {
     public static final int PORT = 6000;
 
     Thread serverThread;
+    private volatile boolean running = true;
+
 
     DatagramSocket socket;
     // MulticastSocket socket;
@@ -94,6 +96,9 @@ public class Smartg4controlServer implements Runnable {
     public boolean isrunning() {
         return (socket != null && serverThread != null);
 
+    }
+    public void terminate() {
+        running = false;
     }
 
     public synchronized void start(String listenAddress, String gatewayAddress) throws IOException {
@@ -149,12 +154,11 @@ public class Smartg4controlServer implements Runnable {
         }
 
         socket.close();
-        try {
-            if (serverThread.isAlive()) {
-                serverThread.join();
-            }
-        } catch (InterruptedException e) {
-        }
+
+            terminate() ;
+
+            
+  
 
         serverThread = null;
         socket = null;
@@ -168,7 +172,7 @@ public class Smartg4controlServer implements Runnable {
         byte[] recvBuf = new byte[MAX_PACKET_SIZE];
         DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
 
-        while (true) {
+        while (running) {
             try {
                 socket.receive(packet);
             } catch (SocketException e) {

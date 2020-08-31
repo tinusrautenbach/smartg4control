@@ -20,7 +20,7 @@ import org.eclipse.smarthome.core.thing.ThingTypeUID;
 @NonNullByDefault
 public class Smartg4controlBindingConstants {
 
-    private static final String BINDING_ID = "smartg4control";
+    private static final String BINDING_ID = "sg4";
 
     // List of all Thing Type UIDs
     public static final ThingTypeUID THING_TYPE_SMARTBUS_G4_RELAY = new ThingTypeUID(BINDING_ID, "switch");

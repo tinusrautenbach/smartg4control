@@ -1,4 +1,4 @@
 bin/
-
+target/
 
 !*/target/org.openhab.binding.smartg4control-2.5.7-SNAPSHOT.jar

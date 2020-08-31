@@ -34,7 +34,7 @@ public class TestServer {
     public void startTest() {
         try {
 
-            hs.start("192.168.1.238", "255.255.255.255");
+            hs.start("192.168.1.220", "255.255.255.255");
             // hs.start("fd7c:7d3d:9d06:a700:fc59:7062:2ed5:8a99", "255.255.255.255");
 
             Smartg4controlPacket p = new Smartg4controlPacket();
@@ -81,6 +81,7 @@ public class TestServer {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             logger.debug("ERROR:", e);
+            System.out.println(e.toString());
         }
         hs.stop();
 

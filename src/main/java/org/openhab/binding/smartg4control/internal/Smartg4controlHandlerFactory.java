@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author TinusRautenbach - Initial contribution
  */
-@Component(service = ThingHandlerFactory.class, immediate = true, configurationPid = "smartg4control")
+@Component(service = ThingHandlerFactory.class, immediate = true, configurationPid = "sg4")
 
 public class Smartg4controlHandlerFactory extends BaseThingHandlerFactory {
     Smartg4controlServer hs;

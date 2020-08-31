@@ -71,8 +71,10 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
+        logger.debug("handleCommand({},{})", channelUID, command);
+
         if (channelUID.getId().equals(Smartg4controlBindingConstants.CHANNEL_switchstatus)) {
-            // TODO: handle command
+            
             Smartg4controlDimmer hdim = (Smartg4controlDimmer) hs.getDevice(getAddressFromThisThing());
             if (command.equals(OnOffType.ON)) {
 
@@ -132,16 +134,25 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
         // "Could not control device at IP address x.x.x.x");
     }
 
+
+    
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+    
+        super.channelLinked(channelUID);
+        logger.debug("------------------------------channelLinked:" + channelUID);
+    }
+
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
+    
         super.dispose();
         hs.stop();
     }
 
     @Override
     public void handleRemoval() {
-        // TODO Auto-generated method stub
+    
         super.handleRemoval();
         hs.stop();
     }
@@ -261,11 +272,11 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
 
         // logger.debug("thing {}", thing.getUID());
 
-        // for (Channel item : thing.getChannels()) {
+         for (Channel item : thing.getChannels()) {
 
-        // logger.debug("channels {}", item.getUID());
+         logger.debug("channels {}", item.getUID());
 
-        // }
+         }
 
         if (thing.getThingTypeUID().equals(Smartg4controlBindingConstants.THING_TYPE_G4_DIMMER)) {
 

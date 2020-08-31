@@ -1,6 +1,14 @@
+
 {
     "version": "0.2.0",
     "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - TestServer",
+            "request": "launch",
+            "mainClass": "org.openhab.binding.smartg4control.internal.bus.TestServer",
+            "projectName": "org.openhab.binding.smartg4control"
+        },
         {
             "type": "java",
             "name": "Debug (Attach) - openHAB",

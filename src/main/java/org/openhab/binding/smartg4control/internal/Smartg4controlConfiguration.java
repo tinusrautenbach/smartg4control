@@ -18,7 +18,7 @@ public class Smartg4controlConfiguration {
     /**
      * Sample configuration parameter. Replace with you own.
      */
-    public String listenAddress = "192.168.1.238";
+    public String listenAddress = "192.168.1.220";
     public String gateWayAddress = "255.255.255.255";
     public int port = 6000;
 

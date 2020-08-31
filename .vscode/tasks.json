@@ -2,10 +2,10 @@
     "version": "2.0.0",
     "options": {
         "env": {
-            "openhab_home": "/data/openhab",
-            "openhab_runtime": "/data/openhab/runtime",
-            "openhab_addons": "/data/openhab/addons",
-            "openhab_logs": "/data/opnehab/userdata/logs",
+            "openhab_home": "/usr/share/openhab2",
+            "openhab_runtime": "/usr/share/openhab2/runtime",
+            "openhab_addons": "/usr/share/openhab2/addons",
+            "openhab_logs": "/var/log/openhab2",
             "dist" : "org.openhab.binding.smartg4control-2.5.7-SNAPSHOT.jar"
         }
     },
@@ -14,7 +14,7 @@
             "label": "Start openHAB (Debug)",
             "type": "shell",
             "isBackground": true,
-            "command": "$openhab_home/start.sh debug",
+            "command": "sudo $openhab_home/start.sh debug",
             "windows": {
                 "command": "& $env:openhab_home/start.bat debug"
             },
@@ -27,7 +27,7 @@
         {
             "label": "Stop openHAB",
             "type": "shell",
-            "command": "$openhab_runtime/bin/stop",
+            "command": "sudo $openhab_runtime/bin/stop",
             "windows": {
                 "command": "& $env:openhab_runtime/bin/stop.bat"
             },
@@ -93,6 +93,7 @@
         {
             "label": "Copy Distribution to Addons",
             "type": "shell",
+            
             "command": "cp",
             "args": [
                 "${workspaceFolder}/target/$dist",
