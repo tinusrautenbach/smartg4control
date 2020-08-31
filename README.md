@@ -31,7 +31,7 @@ I have found since it is udp, there is no need to connect to specific ip or port
 Use the smartcloud software (https://www.smartg4control.com/download-from-our-drive)to get subnet, deviceid and channel where required for each dimmer / relay etc.
 
 ```
-Thing smartg4control:switch:office_light "light" @ "office" [subnetid = 1, deviceid = 21, channel = 11] 
+Thing sg4:switch:office_light "light" @ "office" [subnetid = 1, deviceid = 21, channel = 11] 
 
 
 ```
@@ -58,21 +58,21 @@ This binding does not require any special configuration.
 demo.Things:
 
 ```
-Thing smartg4control:dimmer:office_dimmer "dim light" @ "office" [subnetid = 1, deviceid = 40, channel = 5] 
-Thing smartg4control:switch:study_light_1 "light" @ "study_1" [subnetid = 1, deviceid = 40, channel = 1] 
-Thing smartg4control:sensor:office_bath "temp" @ "office_bath" [subnetid = 1, deviceid = 86] 
-Thing smartg4control:sensor:studybath "movement" @ "study_bath" [subnetid = 1, deviceid = 25] 
-Thing smartg4control:ddp:patio"ddp" @ "patio" [subnetid = 1, deviceid = 52]
-Thing smartg4control:logic:logic1 "logic" @ "logic" [subnetid = 1, deviceid = 14]
+Thing sg4:dimmer:office_dimmer "dim light" @ "office" [subnetid = 1, deviceid = 40, channel = 5] 
+Thing sg4:switch:study_light_1 "light" @ "study_1" [subnetid = 1, deviceid = 40, channel = 1] 
+Thing sg4:sensor:office_bath "temp" @ "office_bath" [subnetid = 1, deviceid = 86] 
+Thing sg4:sensor:studybath "movement" @ "study_bath" [subnetid = 1, deviceid = 25] 
+Thing sg4:ddp:patio"ddp" @ "patio" [subnetid = 1, deviceid = 52]
+Thing sg4:logic:logic1 "logic" @ "logic" [subnetid = 1, deviceid = 14]
 ```
 
 demo.items:
 
 ```
-Switch   Study_Bath_Light   "Study Bath Light"         <light>    (Study, gLight)      { channel = "smartg4control:switch:study_bath_light:switchstatus" }
-Dimmer  OfficeDimmer   "Dimmer [%d %%]"	<slider> (Office)	 { channel = "smartg4control:dimmer:office_dimmer:lightlevel" }
-Number 	PlayroomTemp "Playroom Temp [%.1f C]" <temperature> (gTemperature) { channel="smartg4control:ddp:play:temperature" }
-DateTime LogicTime "Last Update [%1$tT - %1tF]" <light> (logic) { channel="smartg4control:logic:logic1:datetime" }
+Switch   Study_Bath_Light   "Study Bath Light"         <light>    (Study, gLight)      { channel = "sg4:switch:study_bath_light:switchstatus" }
+Dimmer  OfficeDimmer   "Dimmer [%d %%]"	<slider> (Office)	 { channel = "sg4:dimmer:office_dimmer:lightlevel" }
+Number 	PlayroomTemp "Playroom Temp [%.1f C]" <temperature> (gTemperature) { channel="sg4:ddp:play:temperature" }
+DateTime LogicTime "Last Update [%1$tT - %1tF]" <light> (logic) { channel="sg4:logic:logic1:datetime" }
 
 
 ```
@@ -122,8 +122,8 @@ The following channels are supported:
 
 | Thing Type                 | Channel ID   | Item Type | Description                        |
 |----------------------------|--------------|-----------|------------------------------------|
-| ra-dimmer                  | lightlevel   | Dimmer    | Increase/Decrease dimmer intensity |
-| ra-switch/ra-phantomButton | switchstatus | Switch    | On/Off state of switch             |
+| dimmer                     | lightlevel   | Dimmer    | Increase/Decrease dimmer intensity |
+| switch                     | switchstatus | Switch    | On/Off state of switch             |
 
 
 
