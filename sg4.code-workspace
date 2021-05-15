@@ -1,26 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "."
-		},
-		{
-			"path": "../../../../../etc/openhab2"
+			"path": "../.."
 		}
 	],
 	"settings": {
-		"logViewer.watch": [
-			{
-				"title": "/var/openhab",
-				"pattern": "/var/log/openhab2/openhab.log"
-			},
-			{
-				"title": "/var/openhab/events",
-				"pattern": "/var/log/openhab2/events.log"
-			},
-			{
-				"title": "/var/openhab/audit",
-				"pattern": "/var/log/openhab2/audit.log"
-			}
-		]
+		"git.ignoreLimitWarning": true
 	}
 }

@@ -10,30 +10,30 @@ package org.openhab.binding.smartg4control.handler;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.ZonedDateTime;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.config.core.Configuration;
-import org.eclipse.smarthome.core.library.types.DateTimeType;
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.PercentType;
-import org.eclipse.smarthome.core.thing.Channel;
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
-import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
-import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.smartg4control.Smartg4controlBindingConstants;
 import org.openhab.binding.smartg4control.internal.Smartg4controlConfiguration;
+import org.openhab.binding.smartg4control.internal.bus.ISmartg4controlDimmerObserver;
 import org.openhab.binding.smartg4control.internal.bus.Smartg4controlDDP;
 import org.openhab.binding.smartg4control.internal.bus.Smartg4controlDimmer;
 import org.openhab.binding.smartg4control.internal.bus.Smartg4controlLogic;
 import org.openhab.binding.smartg4control.internal.bus.Smartg4controlSensor;
 import org.openhab.binding.smartg4control.internal.bus.Smartg4controlServer;
-import org.openhab.binding.smartg4control.internal.bus.ISmartg4controlDimmerObserver;
+import org.openhab.core.config.core.Configuration;
+import org.openhab.core.library.types.DateTimeType;
+import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.library.types.PercentType;
+import org.openhab.core.thing.Channel;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.ThingStatus;
+import org.openhab.core.thing.binding.BaseThingHandler;
+import org.openhab.core.types.Command;
+import org.openhab.core.types.RefreshType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,13 +60,11 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
     public Smartg4controlHandler(Thing thing, Smartg4controlServer hs2) {
         super(thing);
         hs = hs2;
-
     }
 
     String getAddressFromThisThing() {
 
         return configSubnetID + ":" + configDeviceID + "-" + configChannelID;
-
     }
 
     @Override
@@ -74,7 +72,7 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
         logger.debug("handleCommand({},{})", channelUID, command);
 
         if (channelUID.getId().equals(Smartg4controlBindingConstants.CHANNEL_switchstatus)) {
-            
+
             Smartg4controlDimmer hdim = (Smartg4controlDimmer) hs.getDevice(getAddressFromThisThing());
             if (command.equals(OnOffType.ON)) {
 
@@ -134,25 +132,23 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
         // "Could not control device at IP address x.x.x.x");
     }
 
-
-    
     @Override
     public void channelLinked(ChannelUID channelUID) {
-    
+
         super.channelLinked(channelUID);
         logger.debug("------------------------------channelLinked:" + channelUID);
     }
 
     @Override
     public void dispose() {
-    
+
         super.dispose();
         hs.stop();
     }
 
     @Override
     public void handleRemoval() {
-    
+
         super.handleRemoval();
         hs.stop();
     }
@@ -181,8 +177,8 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
             }
             logger.debug("config {}", thing.getConfiguration());
 
-            Smartg4controlDimmer hdim = new Smartg4controlDimmer(configSubnetID, configDeviceID, configChannelID, configLowerLimit,
-                    configUpperLimit, hs, this);
+            Smartg4controlDimmer hdim = new Smartg4controlDimmer(configSubnetID, configDeviceID, configChannelID,
+                    configLowerLimit, configUpperLimit, hs, this);
 
             hs.addDevice(hdim);
 
@@ -249,13 +245,14 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
         // "Can not access device as username and/or password are invalid");
     }
 
-    public void handleDateTimeUpdate(Calendar dt) {
+    public void handleDateTimeUpdate(ZonedDateTime dt) {
         if (thing.getThingTypeUID().equals(Smartg4controlBindingConstants.THING_TYPE_G4_LOGIC)) {
 
             try {
 
                 final Channel channel = thing.getChannel(Smartg4controlBindingConstants.CHANNEL_datetime);
                 logger.debug("updateState time {} {} {}", thing.getUID(), dt.toString(), channel);
+
                 DateTimeType dtt = new DateTimeType(dt);
 
                 updateState(channel.getUID(), dtt);
@@ -264,7 +261,6 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
                 logger.debug("pdateState time error ", e);
             }
         }
-
     }
 
     public void handleUpdate(int level) {
@@ -272,11 +268,11 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
 
         // logger.debug("thing {}", thing.getUID());
 
-         for (Channel item : thing.getChannels()) {
+        for (Channel item : thing.getChannels()) {
 
-         logger.debug("channels {}", item.getUID());
+            logger.debug("channels {}", item.getUID());
 
-         }
+        }
 
         if (thing.getThingTypeUID().equals(Smartg4controlBindingConstants.THING_TYPE_G4_DIMMER)) {
 
@@ -317,13 +313,10 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
                 logger.debug("update DDP temp error ", e);
             }
         }
-
     }
 
     @Override
     public void onDimmerStateChanged(Smartg4controlDimmer dim, int state) {
         handleUpdate(state);
-
     }
-
 }

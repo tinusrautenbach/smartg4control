@@ -9,7 +9,7 @@
 package org.openhab.binding.smartg4control;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.openhab.core.thing.ThingTypeUID;
 
 /**
  * The {@link Smartg4controlBindingConstants} class defines common constants, which are
@@ -35,5 +35,4 @@ public class Smartg4controlBindingConstants {
     public static final String CHANNEL_temperature = "temperature";
     public static final String CHANNEL_motion = "motion";
     public static final String CHANNEL_datetime = "datetime";
-
 }

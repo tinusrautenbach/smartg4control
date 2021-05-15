@@ -13,14 +13,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
-import org.eclipse.smarthome.core.thing.binding.ThingHandler;
-import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
 import org.openhab.binding.smartg4control.Smartg4controlBindingConstants;
 import org.openhab.binding.smartg4control.handler.Smartg4controlHandler;
 import org.openhab.binding.smartg4control.internal.bus.Smartg4controlServer;
+import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.ThingTypeUID;
+import org.openhab.core.thing.binding.BaseThingHandlerFactory;
+import org.openhab.core.thing.binding.ThingHandler;
+import org.openhab.core.thing.binding.ThingHandlerFactory;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Component;
 
@@ -69,8 +69,8 @@ public class Smartg4controlHandlerFactory extends BaseThingHandlerFactory {
         Dictionary<String, Object> properties = componentContext.getProperties();
         bindingProperties = new Smartg4controlBindingProperties(properties);
 
-        hs = Smartg4controlServer.getInstance(bindingProperties.getListenAddress(), bindingProperties.getGateWayAddress());
-
+        hs = Smartg4controlServer.getInstance(bindingProperties.getListenAddress(),
+                bindingProperties.getGateWayAddress());
     };
 
     @Override
@@ -79,5 +79,4 @@ public class Smartg4controlHandlerFactory extends BaseThingHandlerFactory {
         hs.stop();
         hs = null;
     };
-
 }

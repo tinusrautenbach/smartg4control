@@ -65,7 +65,6 @@ public class Smartg4controlServer implements Runnable {
         }
 
         return instance;
-
     }
 
     // The protocol defines 27 header bytes + up to 128 aux data bytes.
@@ -77,7 +76,6 @@ public class Smartg4controlServer implements Runnable {
 
     Thread serverThread;
     private volatile boolean running = true;
-
 
     DatagramSocket socket;
     // MulticastSocket socket;
@@ -95,8 +93,8 @@ public class Smartg4controlServer implements Runnable {
 
     public boolean isrunning() {
         return (socket != null && serverThread != null);
-
     }
+
     public void terminate() {
         running = false;
     }
@@ -132,7 +130,6 @@ public class Smartg4controlServer implements Runnable {
                 for (Map.Entry<String, ISmartg4controlDevice> entry : devices.entrySet()) {
                     entry.getValue().updateSensor();
                 }
-
             }
         };
 
@@ -145,7 +142,6 @@ public class Smartg4controlServer implements Runnable {
 
         }
         timer.scheduleAtFixedRate(task, delay, intevalPeriod);
-
     }
 
     public synchronized void stop() {
@@ -155,16 +151,12 @@ public class Smartg4controlServer implements Runnable {
 
         socket.close();
 
-            terminate() ;
-
-            
-  
+        terminate();
 
         serverThread = null;
         socket = null;
         timer.cancel();
         timer = null;
-
     }
 
     @Override
@@ -226,7 +218,8 @@ public class Smartg4controlServer implements Runnable {
 
                 }
             } else if (p.getCommand() == Smartg4controlSensor.CMD_READ_TEMP_RESPONSE) {
-                if (p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_8IN1 || p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_5IN1
+                if (p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_8IN1
+                        || p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_5IN1
                         || p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_6IN1
                         || p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_9IN1) {
                     // logger.debug("process TEMP RESPONSE");
@@ -292,7 +285,6 @@ public class Smartg4controlServer implements Runnable {
                 logger.debug("other {}", p);
             }
         }
-
     }
 
     public void addDevice(ISmartg4controlDevice device) {
@@ -341,22 +333,20 @@ public class Smartg4controlServer implements Runnable {
             // s.setTimeToLive(1);
             s.send(packet);
         }
-
     }
 
     public ScheduledFuture sendPacketWithRetry(Smartg4controlPacket p) throws IOException {
         return sendPacketWithRetry(p, retryCount, retryTime, retryTimeUnit);
     }
 
-    private ScheduledFuture sendPacketWithRetry(Smartg4controlPacket p, int retryCount, int retryTime, TimeUnit timeUnit)
-            throws IOException {
+    private ScheduledFuture sendPacketWithRetry(Smartg4controlPacket p, int retryCount, int retryTime,
+            TimeUnit timeUnit) throws IOException {
         sendPacket(p);
         PacketResender r = new PacketResender(p, this, retryCount);
         ScheduledFuture f = scheduler.scheduleAtFixedRate(r, retryTime, retryTime, timeUnit);
         r.setFuture(f);
         return f;
     }
-
 }
 
 /**

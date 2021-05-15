@@ -13,5 +13,6 @@
             "title": "/var/openhab/audit",
             "pattern": "/var/log/openhab2/audit.log"
         }
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

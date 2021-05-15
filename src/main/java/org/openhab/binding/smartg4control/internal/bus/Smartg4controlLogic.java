@@ -9,6 +9,8 @@
 package org.openhab.binding.smartg4control.internal.bus;
 
 import java.io.IOException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.ListIterator;
 import java.util.concurrent.ScheduledFuture;
@@ -76,20 +78,17 @@ public class Smartg4controlLogic extends GenericSmartg4controlDevice {
                     return;
                 }
                 setFuture(CHANNEL_DATETIME, null);
-                int yr = data[0];
+                int yr = data[0] + 2000;
                 int month = data[1] - 1;
                 int day = data[2];
                 int hour = data[3];
                 int min = data[4];
                 int seconds = data[5];
+                int nano = 0;
+                ZonedDateTime zt = ZonedDateTime.of(yr, month, day, hour, min, seconds, nano, ZoneId.systemDefault());
 
-                Calendar c = Calendar.getInstance();
-
-                c.set(2000 + yr, month, day, hour, min);
-                c.set(Calendar.SECOND, seconds);
-
-                logger.debug ("logic datetime {}  ", c.toString());
-                handler.handleDateTimeUpdate(c);
+                logger.debug("logic datetime {}  ", zt.toString());
+                handler.handleDateTimeUpdate(zt);
 
                 synchronized (observers) {
                     if (observers != null) {
@@ -156,7 +155,5 @@ public class Smartg4controlLogic extends GenericSmartg4controlDevice {
             // TODO Auto-generated catch block
             logger.error("updatesensor", e);
         }
-
     }
-
 }

@@ -25,7 +25,6 @@ public class TestServer {
         // TODO Auto-generated method stub
         TestServer ts = new TestServer();
         ts.startTest();
-
     }
 
     public static final int CMD_DIMMER_SET_STATE = 0x0031;
@@ -84,7 +83,5 @@ public class TestServer {
             System.out.println(e.toString());
         }
         hs.stop();
-
     }
-
 }

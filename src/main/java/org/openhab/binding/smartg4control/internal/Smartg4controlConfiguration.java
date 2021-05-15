@@ -21,5 +21,4 @@ public class Smartg4controlConfiguration {
     public String listenAddress = "192.168.1.220";
     public String gateWayAddress = "255.255.255.255";
     public int port = 6000;
-
 }

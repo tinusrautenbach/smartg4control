@@ -178,6 +178,5 @@ public class Smartg4controlDimmer extends GenericSmartg4controlDevice {
         } catch (IOException e) {
             logger.error("readstatus error: ", e);
         }
-
     }
 }

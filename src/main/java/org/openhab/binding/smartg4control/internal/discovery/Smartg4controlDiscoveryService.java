@@ -11,11 +11,11 @@ package org.openhab.binding.smartg4control.internal.discovery;
 import java.util.Collections;
 import java.util.Set;
 
-import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
-import org.eclipse.smarthome.config.discovery.DiscoveryService;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.openhab.binding.smartg4control.Smartg4controlBindingConstants;
 import org.openhab.binding.smartg4control.internal.bus.Smartg4controlServer;
+import org.openhab.core.config.discovery.AbstractDiscoveryService;
+import org.openhab.core.config.discovery.DiscoveryService;
+import org.openhab.core.thing.ThingTypeUID;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,6 @@ public class Smartg4controlDiscoveryService extends AbstractDiscoveryService {
 
     @Override
     protected void startScan() {
-
     }
 
     @Override
@@ -65,5 +64,4 @@ public class Smartg4controlDiscoveryService extends AbstractDiscoveryService {
     public void deactivate() {
         removeOlderResults(getTimestampOfLastScan());
     }
-
 }
