@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.smartg4control.internal;
 
@@ -30,6 +34,11 @@ public class Smartg4controlBindingProperties {
     private final String gateWayAddress;
     private String listenAddress;
     private final int listenPort;
+    private final int sensor_refresh;
+
+    public int getSensor_refresh() {
+        return sensor_refresh;
+    }
 
     private static final String PROP_GATEWAY_PORT = "gateWayPort";
     private static final int GATEWAY_PORT_DEFAULT_VALUE = 6000;
@@ -39,12 +48,14 @@ public class Smartg4controlBindingProperties {
     private static final String LISTEN_ADDRESS_DEFAULT_VALUE = "192.168.1.110";
     private static final String GATEWAY_ADDRESS_DEFAULT_VALUE = "255.255.255.255";
     private static final String PROP_LISTEN_PORT = "listenPort";
+    private static final String PROP_SENSOR_REFRESH = "sensor_refresh";
+    private static final int PROP_SENSOR_REFRESH_DEFAULT_VALUE = 300;
 
     public Smartg4controlBindingProperties(Dictionary<String, Object> properties) {
 
         gatewayPort = getIntegerProperty(properties, PROP_GATEWAY_PORT, GATEWAY_PORT_DEFAULT_VALUE);
         listenPort = getIntegerProperty(properties, PROP_LISTEN_PORT, LISTEN_PORT_DEFAULT_VALUE);
-
+        sensor_refresh = getIntegerProperty(properties, PROP_SENSOR_REFRESH, PROP_SENSOR_REFRESH_DEFAULT_VALUE);
         gateWayAddress = getStringProperty(properties, PROP_GATEWAY_ADDRESS, GATEWAY_ADDRESS_DEFAULT_VALUE);
 
         try (final DatagramSocket socket = new DatagramSocket()) {

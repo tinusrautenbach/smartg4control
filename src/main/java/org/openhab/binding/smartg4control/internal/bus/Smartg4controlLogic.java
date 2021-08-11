@@ -90,17 +90,17 @@ public class Smartg4controlLogic extends GenericSmartg4controlDevice {
                 int seconds = data[5];
                 int nano = 0;
                 try {
-                    
-                
-                ZonedDateTime zt = ZonedDateTime.of(yr, month, day, hour, min, seconds, nano, ZoneId.systemDefault());
-                logger.debug("logic datetime {}  ", zt.toString());
-                handler.handleDateTimeUpdate(zt);
 
-            } catch (Exception e) {
-                logger.error("datetime error yr:{} month:{} day:{} hour:{} min:{} seconds:{}  data: {}", yr, month, day,hour,min,seconds,data);
-            }
+                    ZonedDateTime zt = ZonedDateTime.of(yr, month, day, hour, min, seconds, nano,
+                            ZoneId.systemDefault());
+                    logger.debug("logic datetime {}  ", zt.toString());
+                    handler.handleDateTimeUpdate(zt);
 
-                
+                } catch (Exception e) {
+                    logger.error("datetime error yr:{} month:{} day:{} hour:{} min:{} seconds:{}  data: {}", yr, month,
+                            day, hour, min, seconds, data);
+                }
+
                 synchronized (observers) {
                     if (observers != null) {
                         ListIterator<Object> i = observers.listIterator(0);
@@ -133,9 +133,11 @@ public class Smartg4controlLogic extends GenericSmartg4controlDevice {
         int min = c.get(Calendar.MINUTE);
         int sec = c.get(Calendar.SECOND);
 
-        // [da02][510-270-cmd:da02-deviceCode:65534] [ SOURCE = sub:1 devId:254] [ TARGET = sub:1 devId:14] + DATA[ 19 4
+        // [da02][510-270-cmd:da02-deviceCode:65534] [ SOURCE = sub:1 devId:254] [
+        // TARGET = sub:1 devId:14] + DATA[ 19 4
         // 13 11 19 58 6]
-        // [da03][270-510-cmd:da03-deviceCode:1108] [ SOURCE = sub:1 devId:14] [ TARGET = sub:1 devId:254] + DATA[ -8]
+        // [da03][270-510-cmd:da03-deviceCode:1108] [ SOURCE = sub:1 devId:14] [ TARGET
+        // = sub:1 devId:254] + DATA[ -8]
 
         p.setData(new byte[] { (byte) yr, (byte) month, (byte) day, (byte) hour, (byte) min, (byte) sec });
 

@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.smartg4control.internal.bus;
 
@@ -39,12 +43,12 @@ public class Smartg4controlServer implements Runnable {
 
     private static Smartg4controlServer instance = null;
 
-    public static Smartg4controlServer getInstance(String listenAddress, String gateWayAddress) {
+    public static Smartg4controlServer getInstance(String listenAddress, String gateWayAddress, int sensor_refresh) {
 
         if (instance == null) {
             instance = new Smartg4controlServer();
             try {
-                instance.start(listenAddress, gateWayAddress);
+                instance.start(listenAddress, gateWayAddress, sensor_refresh);
             } catch (IOException e) {
 
                 logger.error("cant start server", e);
@@ -55,7 +59,7 @@ public class Smartg4controlServer implements Runnable {
             if (!instance.isrunning()) {
                 logger.debug("server not running trying to start");
                 try {
-                    instance.start(listenAddress, gateWayAddress);
+                    instance.start(listenAddress, gateWayAddress, sensor_refresh);
                 } catch (IOException e) {
 
                     logger.error("cant start server", e);
@@ -99,7 +103,7 @@ public class Smartg4controlServer implements Runnable {
         running = false;
     }
 
-    public synchronized void start(String listenAddress, String gatewayAddress) throws IOException {
+    public synchronized void start(String listenAddress, String gatewayAddress, int sensor_refresh) throws IOException {
         if (socket != null || serverThread != null) {
             throw new IOException("server already started");
         }
@@ -107,7 +111,7 @@ public class Smartg4controlServer implements Runnable {
 
         this.gatewayAddress = InetAddress.getByName(gatewayAddress);
         this.listenAddress = InetAddress.getByName(listenAddress);
-        logger.debug("server start {}", listenAddress, PORT);
+        logger.debug("server start {} {}", listenAddress, PORT);
 
         // MulticastSocket ms = new MulticastSocket(PORT);
         // socket = ms;
@@ -134,7 +138,7 @@ public class Smartg4controlServer implements Runnable {
         };
 
         long delay = 0;
-        long intevalPeriod = 60 * 1000;
+        long intevalPeriod = sensor_refresh * 1000;
         // schedules the task to be run in an interval
 
         if (timer == null) {
@@ -166,63 +170,80 @@ public class Smartg4controlServer implements Runnable {
 
         while (running) {
             try {
-                socket.receive(packet);
-            } catch (SocketException e) {
-                logger.error("Socket error", e);
-                break;
-            } catch (IOException e) {
-                logger.warn("io error");
-                continue;
-            }
 
-            Smartg4controlPacket p = Smartg4controlPacket.parse(packet.getData(), packet.getLength());
-            // logger.debug("packet {} {} {} {}", p, p.getSourceDevice(), Integer.toHexString(p.getCommand()),
-            // Smartg4controlDDP.CMD_DDP_READ_TEMP_RESPONSE);
-
-            if (p.getCommand() == Smartg4controlDimmer.CMD_DIMMER_RESPONSE_STATUS_OF_CHANNELS) {
-
-                byte[] data = p.getData();
-                int qtyChannels = data[0];
-
-                for (int i = 1; i <= qtyChannels; i++) {
-                    String tAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID() + "-" + i;
-                    ISmartg4controlDevice d = devices.get(tAddress);
-                    if (d != null) {
-
-                        d.processPacket(p);
-
-                    }
-
+                try {
+                    socket.receive(packet);
+                } catch (SocketException e) {
+                    logger.error("Socket error", e);
+                    break;
+                } catch (IOException e) {
+                    logger.warn("io error");
+                    continue;
                 }
 
-            } else if (p.getCommand() == Smartg4controlDimmer.CMD_DIMMER_SET_STATE_RESPONSE) {
-                if (p.getSourceDevice() == Smartg4controlDimmer.DEVICE_ID_DIMMER_8
-                        || p.getSourceDevice() == Smartg4controlDimmer.DEVICE_ID_RELAY_12
-                        || p.getSourceDevice() == Smartg4controlDimmer.DEVICE_ID_RELAY_6
-                        || p.getSourceDevice() == Smartg4controlDimmer.DEVICE_ID_RELAY_8) {
+                Smartg4controlPacket p = Smartg4controlPacket.parse(packet.getData(), packet.getLength());
+                // logger.debug("packet {} {} {} {}", p, p.getSourceDevice(),
+                // Integer.toHexString(p.getCommand()),
+                // Smartg4controlDDP.CMD_DDP_READ_TEMP_RESPONSE);
 
-                    int channel = p.getData()[0];
+                if (p.getCommand() == Smartg4controlDimmer.CMD_DIMMER_RESPONSE_STATUS_OF_CHANNELS) {
 
-                    String uAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID() + "-" + channel;
+                    byte[] data = p.getData();
+                    int qtyChannels = data[0];
 
-                    // logger.debug("packet {} {}", uAddress, p);
-
-                    if (p != null) {
-
-                        ISmartg4controlDevice d = devices.get(uAddress);
-
+                    for (int i = 1; i <= qtyChannels; i++) {
+                        String tAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID() + "-" + i;
+                        ISmartg4controlDevice d = devices.get(tAddress);
                         if (d != null) {
+
                             d.processPacket(p);
+
                         }
+
                     }
 
-                }
-            } else if (p.getCommand() == Smartg4controlSensor.CMD_READ_TEMP_RESPONSE) {
-                if (p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_8IN1
-                        || p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_5IN1
-                        || p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_6IN1
-                        || p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_9IN1) {
-                    // logger.debug("process TEMP RESPONSE");
+                } else if (p.getCommand() == Smartg4controlDimmer.CMD_DIMMER_SET_STATE_RESPONSE) {
+                    if (p.getSourceDevice() == Smartg4controlDimmer.DEVICE_ID_DIMMER_8
+                            || p.getSourceDevice() == Smartg4controlDimmer.DEVICE_ID_RELAY_12
+                            || p.getSourceDevice() == Smartg4controlDimmer.DEVICE_ID_RELAY_6
+                            || p.getSourceDevice() == Smartg4controlDimmer.DEVICE_ID_RELAY_8) {
+
+                        int channel = p.getData()[0];
+
+                        String uAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID() + "-" + channel;
+
+                        // logger.debug("packet {} {}", uAddress, p);
+
+                        if (p != null) {
+
+                            ISmartg4controlDevice d = devices.get(uAddress);
+
+                            if (d != null) {
+                                d.processPacket(p);
+                            }
+                        }
+
+                    }
+                } else if (p.getCommand() == Smartg4controlSensor.CMD_READ_TEMP_RESPONSE) {
+                    if (p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_8IN1
+                            || p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_5IN1
+                            || p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_6IN1
+                            || p.getSourceDevice() == Smartg4controlSensor.DEVICE_ID_9IN1) {
+                        // logger.debug("process TEMP RESPONSE");
+                        String uAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID();
+                        if (p != null) {
+
+                            ISmartg4controlDevice d = devices.get(uAddress);
+
+                            if (d != null) {
+                                d.processPacket(p);
+                            }
+                        }
+
+                    }
+                } else if (p.getCommand() == Smartg4controlLogic.CMD_DATE_TIME_RESPONSE) {
+
+                    logger.debug("process logic time RESPONSE");
                     String uAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID();
                     if (p != null) {
 
@@ -233,56 +254,45 @@ public class Smartg4controlServer implements Runnable {
                         }
                     }
 
-                }
-            } else if (p.getCommand() == Smartg4controlLogic.CMD_DATE_TIME_RESPONSE) {
+                } else if (p.getCommand() == Smartg4controlDDP.CMD_DDP_READ_TEMP_RESPONSE) {
 
-                logger.debug("process logic time RESPONSE");
-                String uAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID();
-                if (p != null) {
+                    logger.debug("process DDP TEMP RESPONSE");
+                    String uAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID();
+                    if (p != null) {
 
-                    ISmartg4controlDevice d = devices.get(uAddress);
+                        ISmartg4controlDevice d = devices.get(uAddress);
 
-                    if (d != null) {
-                        d.processPacket(p);
+                        if (d != null) {
+                            d.processPacket(p);
+                        }
                     }
-                }
 
-            } else if (p.getCommand() == Smartg4controlDDP.CMD_DDP_READ_TEMP_RESPONSE) {
+                } else if (p.getCommand() == GenericSmartg4controlDevice.CMD_DETECT_ADDRESS_RESPONSE) {
 
-                logger.debug("process DDP TEMP RESPONSE");
-                String uAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID();
-                if (p != null) {
+                    logger.debug("process mac response");
+                    String uAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID();
+                    if (p != null) {
 
-                    ISmartg4controlDevice d = devices.get(uAddress);
-
-                    if (d != null) {
-                        d.processPacket(p);
+                        logger.debug("mac response {}", p);
                     }
+
+                } else if (p.getCommand() == Smartg4controlDimmer.CMD_FORWARDLY_REPORT_DIMMER_STATUS) {
+
+                    // logger.debug("forward report status of dimmer");
+                    // String uAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID();
+                    // TODO: do nothing at the moment
+
+                } else if (p.getCommand() == Smartg4controlDimmer.CMD_DIMMER_SET_STATE) {
+
+                    // setting level from other switch
+
                 }
 
-            } else if (p.getCommand() == GenericSmartg4controlDevice.CMD_DETECT_ADDRESS_RESPONSE) {
-
-                logger.debug("process mac response");
-                String uAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID();
-                if (p != null) {
-
-                    logger.debug("mac response {}", p);
+                else {
+                    logger.debug("other {}", p);
                 }
-
-            } else if (p.getCommand() == Smartg4controlDimmer.CMD_FORWARDLY_REPORT_DIMMER_STATUS) {
-
-                // logger.debug("forward report status of dimmer");
-                // String uAddress = p.getSourceSubnetID() + ":" + p.getSourceDevideID();
-                // TODO: do nothing at the moment
-
-            } else if (p.getCommand() == Smartg4controlDimmer.CMD_DIMMER_SET_STATE) {
-
-                // setting level from other switch
-
-            }
-
-            else {
-                logger.debug("other {}", p);
+            } catch (Exception e) {
+                logger.error("server error:", e);
             }
         }
     }
@@ -324,7 +334,8 @@ public class Smartg4controlServer implements Runnable {
         p.setSourceAddress(0x01fe);
 
         byte[] bytes = p.getBytes();
-        // logger.debug("send {} {} {} {} ", bytes, this.gatewayAddress, PORT, listenAddress);
+        // logger.debug("send {} {} {} {} ", bytes, this.gatewayAddress, PORT,
+        // listenAddress);
         InetAddress group = InetAddress.getByName("255.255.255.255");
 
         for (InetAddress b : blist) {

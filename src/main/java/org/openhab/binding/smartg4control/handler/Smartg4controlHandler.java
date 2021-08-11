@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.smartg4control.handler;
 
@@ -101,17 +105,17 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
                     try {
                         hdim.switchOn();
                     } catch (Exception e) {
-                        logger.error(channelUID.getId());
-                        logger.error("cant switch on in command:", e);
+                        logger.error("channelUID:{}", channelUID.getId());
+                        logger.error("cant send switchon", e);
                     }
 
                 } else if (command.equals(OnOffType.OFF)) {
                     try {
                         hdim.switchOff();
                     } catch (Exception e) {
-                        logger.error(channelUID.getId());
+                        logger.error("channelUID:{}", channelUID.getId());
 
-                        logger.error("cant switch off in command:", e);
+                        logger.error("cant switch off in command: ", e);
                     }
                 }
             } else {
@@ -119,7 +123,7 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
                 try {
                     hdim.dim(level);
                 } catch (Exception e) {
-                    logger.error(channelUID.getId());
+                    logger.error("channelUID:{}", channelUID.getId());
                     logger.error("cant dim channel:", e);
                 }
             }
@@ -136,7 +140,7 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
     public void channelLinked(ChannelUID channelUID) {
 
         super.channelLinked(channelUID);
-        logger.debug("------------------------------channelLinked:" + channelUID);
+        logger.debug("------------------------------channelLinked: {}", channelUID);
     }
 
     @Override
