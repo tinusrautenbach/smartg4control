@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.smartg4control.internal.bus;
 
@@ -85,11 +89,18 @@ public class Smartg4controlLogic extends GenericSmartg4controlDevice {
                 int min = data[4];
                 int seconds = data[5];
                 int nano = 0;
+                try {
+                    
+                
                 ZonedDateTime zt = ZonedDateTime.of(yr, month, day, hour, min, seconds, nano, ZoneId.systemDefault());
-
                 logger.debug("logic datetime {}  ", zt.toString());
                 handler.handleDateTimeUpdate(zt);
 
+            } catch (Exception e) {
+                logger.error("datetime error yr:{} month:{} day:{} hour:{} min:{} seconds:{}  data: {}", yr, month, day,hour,min,seconds,data);
+            }
+
+                
                 synchronized (observers) {
                     if (observers != null) {
                         ListIterator<Object> i = observers.listIterator(0);
