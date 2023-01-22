@@ -8,7 +8,7 @@
     <groupId>org.openhab.addons.bundles</groupId>
     <artifactId>org.openhab.addons.reactor.bundles</artifactId>
     <version>3.2.0-SNAPSHOT</version>
-    <relativePath>../openhab-addons/bundles</relativePath>
+    <relativePath>../openhab-addons_old/bundles</relativePath>
   </parent>
 
   <artifactId>org.openhab.binding.smartg4control</artifactId>

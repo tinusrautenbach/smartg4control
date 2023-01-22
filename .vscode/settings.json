@@ -14,5 +14,6 @@
             "pattern": "/var/log/openhab2/audit.log"
         }
     ],
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "automatic"
 }

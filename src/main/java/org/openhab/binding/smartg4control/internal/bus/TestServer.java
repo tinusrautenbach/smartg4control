@@ -81,6 +81,10 @@ public class TestServer {
             p.setData(new byte[] { (byte) channel, (byte) value, 0, 0 });
             hs.sendPacket(p);
 
+            // ddp playroom
+            Smartg4controlDDP ddp = new Smartg4controlDDP(channel, 50, hs, null);
+            ddp.updateSensor();
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             logger.debug("ERROR:", e);

@@ -83,7 +83,7 @@ public class Smartg4controlLogic extends GenericSmartg4controlDevice {
                 }
                 setFuture(CHANNEL_DATETIME, null);
                 int yr = data[0] + 2000;
-                int month = data[1] - 1;
+                int month = data[1];
                 int day = data[2];
                 int hour = data[3];
                 int min = data[4];

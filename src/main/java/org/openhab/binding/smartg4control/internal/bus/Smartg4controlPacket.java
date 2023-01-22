@@ -15,11 +15,15 @@ package org.openhab.binding.smartg4control.internal.bus;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author TinusRautenbach - Initial contribution
  */
 class Smartg4controlPacket {
+    private static final Logger logger = LoggerFactory.getLogger(Smartg4controlPacket.class);
     int sourceAddress;
     int sourceDevice = 0xfeff;
     int command;
@@ -95,7 +99,9 @@ class Smartg4controlPacket {
         }
 
         if (computeCRC16(data, 16, data[16] - 2) != ushort(data[length - 2], data[length - 1])) {
-            return null;
+
+            logger.warn("CRC error on read");
+            // return null;
         }
 
         int offset = 17;
