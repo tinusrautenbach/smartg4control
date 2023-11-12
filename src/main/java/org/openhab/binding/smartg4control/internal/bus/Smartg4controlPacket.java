@@ -100,7 +100,7 @@ class Smartg4controlPacket {
 
         if (computeCRC16(data, 16, data[16] - 2) != ushort(data[length - 2], data[length - 1])) {
 
-            logger.warn("CRC error on read");
+            logger.info("CRC error on read {}", data);
             // return null;
         }
 
