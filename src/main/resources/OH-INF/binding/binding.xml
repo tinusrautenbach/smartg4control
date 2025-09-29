@@ -9,33 +9,33 @@
 
 	<config-description>
 		<parameter name="listenAddress" type="text">
-			<label>listenAddress</label>
-			<description>listenAddress</description>
+			<label>Listen Address</label>
+			<description>IP address to listen on</description>
 			<default>192.168.1.238</default>
 
 		</parameter>
 		<parameter name="gateWayAddress" type="text">
-			<label>gateWayAddress</label>
-			<description>gateWayAddress</description>
+			<label>Gateway Address</label>
+			<description>Gateway IP address</description>
 			<default>255.255.255.255</default>
 
 		</parameter>
 		<parameter name="gateWayPort" type="integer">
-			<label>gateWayPort</label>
-			<description>gateWayPort</description>
+			<label>Gateway Port</label>
+			<description>Gateway UDP port</description>
 			<default>6000</default>
 
 		</parameter>
 		<parameter name="listenPort" type="integer">
-			<label>listenPort</label>
-			<description>listenPort</description>
+			<label>Listen Port</label>
+			<description>UDP port to listen on</description>
 			<default>6000</default>
 
 		</parameter>
 
 		<parameter name="sensor_refresh" type="integer">
-			<label>sensor_refresh</label>
-			<description>sensor_refresh</description>
+			<label>Sensor Refresh Interval</label>
+			<description>Interval in seconds to refresh sensor data</description>
 			<default>300</default>
 
 		</parameter>

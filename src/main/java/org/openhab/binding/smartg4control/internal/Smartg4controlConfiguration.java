@@ -18,11 +18,12 @@ package org.openhab.binding.smartg4control.internal;
  * @author TinusRautenbach - Initial contribution
  */
 public class Smartg4controlConfiguration {
-
     /**
-     * Sample configuration parameter. Replace with you own.
+     * Configuration parameters for the binding, matching those in binding.xml and thing-types.xml
      */
-    public String listenAddress = "192.168.1.220";
+    public String listenAddress = "192.168.1.238";
     public String gateWayAddress = "255.255.255.255";
-    public int port = 6000;
+    public int gateWayPort = 6000;
+    public int listenPort = 6000;
+    public int sensor_refresh = 300;
 }

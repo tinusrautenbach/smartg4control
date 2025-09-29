@@ -26,7 +26,10 @@ import org.openhab.core.thing.binding.BaseThingHandlerFactory;
 import org.openhab.core.thing.binding.ThingHandler;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Modified;
 
 /**
  * The {@link Smartg4controlHandlerFactory} is responsible for creating things and thing
@@ -35,19 +38,17 @@ import org.osgi.service.component.annotations.Component;
  * @author TinusRautenbach - Initial contribution
  */
 @Component(service = ThingHandlerFactory.class, immediate = true, configurationPid = "sg4")
-
 public class Smartg4controlHandlerFactory extends BaseThingHandlerFactory {
-    Smartg4controlServer hs;
+    private Smartg4controlServer hs;
     private Smartg4controlBindingProperties bindingProperties;
 
-    private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<ThingTypeUID>();
+    private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>();
     static {
         SUPPORTED_THING_TYPES_UIDS.add(Smartg4controlBindingConstants.THING_TYPE_G4_DIMMER);
         SUPPORTED_THING_TYPES_UIDS.add(Smartg4controlBindingConstants.THING_TYPE_SMARTBUS_G4_RELAY);
         SUPPORTED_THING_TYPES_UIDS.add(Smartg4controlBindingConstants.THING_TYPE_G4_SENSOR);
         SUPPORTED_THING_TYPES_UIDS.add(Smartg4controlBindingConstants.THING_TYPE_G4_DDP);
         SUPPORTED_THING_TYPES_UIDS.add(Smartg4controlBindingConstants.THING_TYPE_G4_LOGIC);
-
     }
 
     @Override
@@ -58,29 +59,38 @@ public class Smartg4controlHandlerFactory extends BaseThingHandlerFactory {
     @Override
     protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
-
         if (SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID)) {
             return new Smartg4controlHandler(thing, hs);
         }
-
         return null;
     }
 
-    @Override
+    @Activate
     protected void activate(ComponentContext componentContext) {
-        super.activate(componentContext);
+        updateConfig(componentContext.getProperties());
+    }
 
-        Dictionary<String, Object> properties = componentContext.getProperties();
-        bindingProperties = new Smartg4controlBindingProperties(properties);
+    @Modified
+    protected void modified(ComponentContext componentContext) {
+        updateConfig(componentContext.getProperties());
+    }
 
-        hs = Smartg4controlServer.getInstance(bindingProperties.getListenAddress(),
-                bindingProperties.getGateWayAddress(), bindingProperties.getSensor_refresh());
-    };
-
-    @Override
+    @Deactivate
     protected void deactivate(ComponentContext componentContext) {
-        super.deactivate(componentContext);
-        hs.stop();
-        hs = null;
-    };
+        if (hs != null) {
+            hs.stop();
+            hs = null;
+        }
+    }
+
+    private void updateConfig(Dictionary<String, Object> properties) {
+        bindingProperties = new Smartg4controlBindingProperties(properties);
+        if (hs != null) {
+            hs.stop();
+        }
+        hs = Smartg4controlServer.getInstance(
+                bindingProperties.getListenAddress(),
+                bindingProperties.getGateWayAddress(),
+                bindingProperties.getSensor_refresh());
+    }
 }

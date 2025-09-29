@@ -54,6 +54,7 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
 
     Smartg4controlServer hs;
 
+
     int configSubnetID;
     int configDeviceID;
     int configChannelID;
@@ -67,7 +68,6 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
     }
 
     String getAddressFromThisThing() {
-
         return configSubnetID + ":" + configDeviceID + "-" + configChannelID;
     }
 
@@ -159,94 +159,53 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
 
     @Override
     public void initialize() {
-
         Configuration cfg = thing.getConfiguration();
         configSubnetID = ((BigDecimal) cfg.get("subnetid")).intValue();
         configDeviceID = ((BigDecimal) cfg.get("deviceid")).intValue();
         logger.debug("initialise {} {} {} ", configSubnetID, configDeviceID, thing.getThingTypeUID());
+
         if (thing.getThingTypeUID().equals(Smartg4controlBindingConstants.THING_TYPE_G4_DIMMER)
                 || thing.getThingTypeUID().equals(Smartg4controlBindingConstants.THING_TYPE_SMARTBUS_G4_RELAY)) {
-
             if (cfg.get("channel") != null) {
                 configChannelID = ((BigDecimal) cfg.get("channel")).intValue();
             }
             int configLowerLimit = 0;
             if (cfg.get("lower") != null) {
                 configLowerLimit = ((BigDecimal) cfg.get("lower")).intValue();
-
             }
             int configUpperLimit = 100;
             if (cfg.get("upper") != null) {
                 configUpperLimit = ((BigDecimal) cfg.get("upper")).intValue();
             }
             logger.debug("config {}", thing.getConfiguration());
-
             Smartg4controlDimmer hdim = new Smartg4controlDimmer(configSubnetID, configDeviceID, configChannelID,
                     configLowerLimit, configUpperLimit, hs, this);
-
             hs.addDevice(hdim);
-
             try {
                 hdim.readStatus();
             } catch (IOException e) {
                 logger.error("cant send read status message", e);
             }
-
             logger.debug("added device: {}", hdim.getDeviceId());
-
-            // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
-            // Long running initialization should be done asynchronously in background.
         } else if (thing.getThingTypeUID().equals(Smartg4controlBindingConstants.THING_TYPE_G4_SENSOR)) {
-
             Smartg4controlSensor hds = new Smartg4controlSensor(configSubnetID, configDeviceID, hs, this);
             hs.addDevice(hds);
-
             try {
                 hds.readTemp();
             } catch (IOException e) {
-
                 logger.error("cant send read status message", e);
             }
             logger.debug("added sensor device: {}", hds.getDeviceId());
-
         } else if (thing.getThingTypeUID().equals(Smartg4controlBindingConstants.THING_TYPE_G4_DDP)) {
             logger.debug("added DDP device: {}", configDeviceID);
             Smartg4controlDDP ddp = new Smartg4controlDDP(configSubnetID, configDeviceID, hs, this);
             hs.addDevice(ddp);
-
-            /**
-             * try {
-             * hds.readTemp();
-             * } catch (IOException e) {
-             *
-             * logger.error("cant send read status message", e);
-             * }
-             **/
-
         } else if (thing.getThingTypeUID().equals(Smartg4controlBindingConstants.THING_TYPE_G4_LOGIC)) {
             logger.debug("added logic device: {}", configDeviceID);
             Smartg4controlLogic logic = new Smartg4controlLogic(configSubnetID, configDeviceID, hs, this);
             hs.addDevice(logic);
-
-            /**
-             * try {
-             * hds.readTemp();
-             * } catch (IOException e) {
-             *
-             * logger.error("cant send read status message", e);
-             * }
-             **/
-
         }
-
         updateStatus(ThingStatus.ONLINE);
-
-        // Note: When initialization can NOT be done set the status with more details for further
-        // analysis. See also class ThingStatusDetail for all available status details.
-        // Add a description to give user information to understand why thing does not work
-        // as expected. E.g.
-        // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
-        // "Can not access device as username and/or password are invalid");
     }
 
     public void handleDateTimeUpdate(ZonedDateTime dt) {
