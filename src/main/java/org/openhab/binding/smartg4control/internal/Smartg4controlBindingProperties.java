@@ -45,7 +45,7 @@ public class Smartg4controlBindingProperties {
     private static final String PROP_GATEWAY_ADDRESS = "gateWayAddress";
     private static final int LISTEN_PORT_DEFAULT_VALUE = 6000;
     private static final String PROP_LISTEN_ADDRESS = "listenAddress";
-    private static final String LISTEN_ADDRESS_DEFAULT_VALUE = "192.168.1.110";
+    private static final String LISTEN_ADDRESS_DEFAULT_VALUE = "192.168.1.111";
     private static final String GATEWAY_ADDRESS_DEFAULT_VALUE = "255.255.255.255";
     private static final String PROP_LISTEN_PORT = "listenPort";
     private static final String PROP_SENSOR_REFRESH = "sensor_refresh";

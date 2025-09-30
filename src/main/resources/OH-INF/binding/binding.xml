@@ -11,7 +11,7 @@
 		<parameter name="listenAddress" type="text">
 			<label>Listen Address</label>
 			<description>IP address to listen on</description>
-			<default>192.168.1.238</default>
+			<default>192.168.1.111</default>
 
 		</parameter>
 		<parameter name="gateWayAddress" type="text">

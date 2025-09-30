@@ -67,6 +67,7 @@ public class Smartg4controlHandlerFactory extends BaseThingHandlerFactory {
 
     @Activate
     protected void activate(ComponentContext componentContext) {
+        super.activate(componentContext);
         updateConfig(componentContext.getProperties());
     }
 
@@ -77,6 +78,7 @@ public class Smartg4controlHandlerFactory extends BaseThingHandlerFactory {
 
     @Deactivate
     protected void deactivate(ComponentContext componentContext) {
+        super.deactivate(componentContext);
         if (hs != null) {
             hs.stop();
             hs = null;
@@ -88,9 +90,7 @@ public class Smartg4controlHandlerFactory extends BaseThingHandlerFactory {
         if (hs != null) {
             hs.stop();
         }
-        hs = Smartg4controlServer.getInstance(
-                bindingProperties.getListenAddress(),
-                bindingProperties.getGateWayAddress(),
-                bindingProperties.getSensor_refresh());
+        hs = Smartg4controlServer.getInstance(bindingProperties.getListenAddress(),
+                bindingProperties.getGateWayAddress(), bindingProperties.getSensor_refresh());
     }
 }

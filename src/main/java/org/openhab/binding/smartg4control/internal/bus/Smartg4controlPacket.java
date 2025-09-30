@@ -97,11 +97,12 @@ class Smartg4controlPacket {
         if (length != 4 + 10 + 2 + data[16]) {
             return null;
         }
-
+        boolean crcError = false;
         if (computeCRC16(data, 16, data[16] - 2) != ushort(data[length - 2], data[length - 1])) {
 
-            logger.info("CRC error on read {}", data);
-            // return null;
+            logger.info("CRC error on read {} expected {}", computeCRC16(data, 16, data[16] - 2),
+                    ushort(data[length - 2], data[length - 1]));
+            crcError = true;
         }
 
         int offset = 17;
@@ -129,7 +130,9 @@ class Smartg4controlPacket {
 
         packet.data = new byte[length - 27];
         System.arraycopy(data, 25, packet.data, 0, length - 27);
-
+        if (crcError) {
+            logger.info("CRC error on read {}", packet.toString());
+        }
         return packet;
     }
 

@@ -54,7 +54,6 @@ public class Smartg4controlHandler extends BaseThingHandler implements ISmartg4c
 
     Smartg4controlServer hs;
 
-
     int configSubnetID;
     int configDeviceID;
     int configChannelID;
